@@ -33,7 +33,7 @@ public class AlgamoneyExceptionHandler extends ResponseEntityExceptionHandler {
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 
 		String mensagemUsuario = messageSource.getMessage("mensagem.invalida", null, LocaleContextHolder.getLocale());
-		String mensagemDesevolvedor = ex.getCause() != null ? ex.getCause().toString(): ex.toString();
+		String mensagemDesevolvedor = ex.getCause() != null ? ex.getCause().toString() : ex.toString();
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesevolvedor));
 		return handleExceptionInternal(ex, erros, headers, HttpStatus.BAD_REQUEST, request);
 	}
@@ -42,13 +42,14 @@ public class AlgamoneyExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler({ EmptyResultDataAccessException.class })
 	public ResponseEntity<Object> handleEmptyResultDataAcessException(EmptyResultDataAccessException ex,
 			WebRequest request) {
-		String mensagemUsuario = messageSource.getMessage("recurso.nao-encontrado", null, LocaleContextHolder.getLocale());
+		String mensagemUsuario = messageSource.getMessage("recurso.nao-encontrado", null,
+				LocaleContextHolder.getLocale());
 		String mensagemDesevolvedor = ex.toString();
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesevolvedor));
-		return handleExceptionInternal(ex, erros, new HttpHeaders(),
-				HttpStatus.NOT_FOUND, request);
+		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
 	}
 
+	// Mensagem de Erro para não salvar entidades com códigos inexistentes
 	@ExceptionHandler({ DataIntegrityViolationException.class })
 	public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex,
 			WebRequest request) {
@@ -66,7 +67,6 @@ public class AlgamoneyExceptionHandler extends ResponseEntityExceptionHandler {
 		List<Erro> erros = criarListaDeErros(ex.getBindingResult());
 		return handleExceptionInternal(ex, erros, headers, HttpStatus.BAD_REQUEST, request);
 	}
-	
 
 	// Criando uma lista de Erros pra mostrar ao usuário e Desenvolvedor
 	private List<Erro> criarListaDeErros(BindingResult bindingResult) {
@@ -79,7 +79,8 @@ public class AlgamoneyExceptionHandler extends ResponseEntityExceptionHandler {
 		}
 		return erros;
 	}
-
+	
+	//Classe de Erros
 	public static class Erro {
 
 		private String mensagemUsuario;
@@ -97,7 +98,5 @@ public class AlgamoneyExceptionHandler extends ResponseEntityExceptionHandler {
 		public String getMensagemDesenvolvedor() {
 			return mensagemDesenvolvedor;
 		}
-
 	}
-
 }
